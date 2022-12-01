@@ -3,11 +3,14 @@ use clap::Parser;
 /// Simple program to greet a person
 #[derive(Parser, Debug)]
 #[command(author = "qumn", version, about, long_about = None)]
-pub struct Args {
+pub(crate) struct Args {
     #[arg(short, long = "classpath", help = "Special class path")]
-    cp: Option<String>,
+    pub(crate) cp: Option<String>,
     #[arg(help = "Special class")]
-    class: String,
+    pub(crate) class: String,
 
-    args: Vec<String>,
+    pub(crate) args: Vec<String>,
+
+    #[arg(short, long = "Xjre", help = "Special runtime jar path")]
+    pub(crate) Xjre: Option<String>,
 }
