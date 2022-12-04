@@ -1,7 +1,10 @@
-use std::{fs::{self}, path::PathBuf};
+use std::{
+    fs::{self},
+    path::PathBuf,
+};
 
 use super::Entry;
-use anyhow::{Result, Ok};
+use anyhow::{Ok, Result};
 
 #[derive(Debug)]
 pub(super) struct DirEntry {

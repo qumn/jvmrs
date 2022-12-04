@@ -1,0 +1,14 @@
+pub const Class: u8 = 7;
+pub const Fieldref: u8 = 9;
+pub const Methodref: u8 = 10;
+pub const InterfaceMethodref: u8 = 11;
+pub const String: u8 = 8;
+pub const Integer: u8 = 3;
+pub const Float: u8 = 4;
+pub const Long: u8 = 5;
+pub const Double: u8 = 6;
+pub const NameAndType: u8 = 12;
+pub const Utf8: u8 = 1;
+pub const MethodHandle: u8 = 15;
+pub const MethodType: u8 = 16;
+pub const InvokeDynamic: u8 = 18;

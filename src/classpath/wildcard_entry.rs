@@ -46,11 +46,11 @@ fn getJarFile(dir: &str) -> Vec<PathBuf> {
                 .extension()
                 .map(|ext| ext == "jar")
                 .unwrap_or(false)
-            ||
-            de.path()
-                .extension()
-                .map(|ext| ext == "JAR")
-                .unwrap_or(false)
+                || de
+                    .path()
+                    .extension()
+                    .map(|ext| ext == "JAR")
+                    .unwrap_or(false)
         })
         .map(|de| de.path())
         .collect()

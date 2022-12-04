@@ -1,7 +1,6 @@
 use super::{newEntry, Entry, PATH_SEPARATOR};
 use anyhow::Result;
 
-
 #[derive(Debug)]
 pub(super) struct CompositeEntry(Vec<Box<dyn Entry>>);
 

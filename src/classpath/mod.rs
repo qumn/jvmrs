@@ -15,7 +15,7 @@ use zip_entry::ZipEntry;
 const PATH_SEPARATOR: &str = if cfg!(windows) { ";" } else { ":" };
 const JAVA_HOME: &str = "JAVA_HOME";
 
-pub(crate) trait Entry : std::fmt::Debug {
+pub(crate) trait Entry: std::fmt::Debug {
     fn read_class_by_path(&self, classpath: &str) -> Result<(Vec<u8>, &dyn Entry)>;
 
     fn read_class(&self, classname: &str) -> Result<(Vec<u8>, &dyn Entry)> {
@@ -61,7 +61,7 @@ impl ClassPath {
 
     fn parseBootAndExtClassLoader(jre_dir: Option<&str>) -> (Box<dyn Entry>, Box<dyn Entry>) {
         let mut jre_dir = ClassPath::getJreDir(jre_dir);
-        jre_dir.push("lib"); 
+        jre_dir.push("lib");
         jre_dir.push("*");
         let boot_class_loader = newEntry(&jre_dir.as_path().to_str().unwrap());
         jre_dir.pop();
