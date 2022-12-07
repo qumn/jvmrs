@@ -31,3 +31,22 @@ impl DerefMut for ClassReader {
         &mut self.0
     }
 }
+
+#[cfg(test)]
+mod test {
+    use std::{mem};
+
+    const a: usize = 1;
+    #[test]
+    fn test_get_u16s() {
+        let bytes = vec![0x00, 0x01, 0x00, 0x02, 0x00, 0x03];
+        let mut reader = super::ClassReader::new(bytes);
+        let u16s = reader.get_u16s(3);
+
+        let b = &a as *const usize;
+        //let c = size_of::<*const i32>();
+        let c = mem::size_of::<*const i32>();
+        println!("{:?}", c);
+        assert_eq!(u16s, vec![1, 2, 3]);
+    }
+}

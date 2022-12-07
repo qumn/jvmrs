@@ -12,6 +12,7 @@ use crate::cmd::Args;
 mod classfile;
 mod classpath;
 mod cmd;
+mod rtda;
 
 fn main() {
     tracing_subscriber::fmt::init();
@@ -27,4 +28,18 @@ fn startJvm(args: Args) -> anyhow::Result<()> {
     let class_file = ClassFile::new(class_reader);
     println!("{:#?}", class_file);
     Ok(())
+}
+
+
+#[cfg(test)]
+mod test {
+    #[test]
+    fn sh(){
+        let a: i32 = 1;
+        let b: i32 = a << 31;
+        //let c: i32 = a << 32;
+        println!("{}", a);
+        println!("{}", b);
+        //println!("{}", c);
+    }
 }
