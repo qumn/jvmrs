@@ -1,26 +1,38 @@
-use std::collections::VecDeque;
+use std::{collections::VecDeque, rc::Weak};
 
 use super::frame::Frame;
 
-
+#[derive(Debug)]
 pub(crate) struct Thread {
     pub(crate) pc: usize,
-    stack: VecDeque<Frame>
+    stack: VecDeque<Frame>,
 }
 impl Thread {
-    fn new() -> Self {
+    pub(crate) fn new() -> Self {
         Thread {
             pc: 0,
-            stack: VecDeque::new()
+            stack: VecDeque::new(),
         }
     }
-    fn push_frame(&mut self, frame: Frame) {
-        self.stack.push_front(frame);
+    pub(crate) fn push_frame(&mut self, frame: Frame) {
+        self.stack.push_back(frame);
     }
-    fn pop_frame(&mut self) -> Frame {
+    pub(crate) fn pop_frame(&mut self) -> Frame {
         self.stack.pop_front().unwrap()
     }
-    fn current_frame(&self) -> &Frame {
+    pub(crate) fn current_frame(&self) -> &Frame {
         self.stack.get(0).unwrap()
+    }
+    pub(crate) fn current_frame_mut(&mut self) -> &mut Frame {
+        self.stack.get_mut(0).unwrap()
+    }
+    pub(crate) fn reset_pc(&mut self) {
+        self.pc = self.current_frame().next_pc;
+    }
+
+    pub(crate) fn new_frame(&mut self, max_locals: usize, max_stack: usize) -> &Frame {
+        let frame = Frame::new(unsafe {Weak::from_raw(self as *const _)}, max_locals, max_stack);
+        self.push_frame(frame);
+        self.current_frame()
     }
 }

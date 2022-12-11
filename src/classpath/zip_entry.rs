@@ -38,7 +38,7 @@ impl Entry for ZipEntry {
             ZipArchive::new(file).expect("请输入正确的路径")
         });
 
-        let mut file = zip.by_name(classpath).expect("can't find class file");
+        let mut file = zip.by_name(classpath)?;
         let mut buf = Vec::with_capacity(file.size() as usize);
         file.read_to_end(&mut buf)?;
         Ok((buf, self))

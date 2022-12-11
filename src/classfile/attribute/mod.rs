@@ -1,12 +1,12 @@
 use bytes::Buf;
 
-mod code;
-mod line_number;
-mod marks;
-mod source_file;
-mod unparsed;
-mod exception;
-mod constant_value;
+pub mod code;
+pub mod line_number;
+pub mod marks;
+pub mod source_file;
+pub mod unparsed;
+pub mod exception;
+pub mod constant_value;
 
 use self::{
     code::CodeAttribute,

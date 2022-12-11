@@ -304,6 +304,7 @@ dependencies = [
  "anyhow",
  "bytes",
  "clap",
+ "lazy_static",
  "tracing",
  "tracing-subscriber",
  "zip",

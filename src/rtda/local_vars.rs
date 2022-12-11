@@ -2,6 +2,7 @@ use std::ops::{Deref, DerefMut};
 
 use super::slot::SlotVec;
 
+#[derive(Debug)]
 pub(crate) struct LocalVars(SlotVec);
 impl LocalVars {
     pub(crate) fn new(max_locals: usize) -> Self {

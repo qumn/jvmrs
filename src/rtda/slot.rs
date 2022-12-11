@@ -1,6 +1,6 @@
 use super::object::Object;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub(crate) enum Slot {
     Int(i32),
     Float(f32),
@@ -15,6 +15,7 @@ impl Slot {
     }
 }
 
+#[derive(Debug)]
 pub(crate) struct SlotVec {
     vars: Vec<Slot>
 }
@@ -78,5 +79,11 @@ impl SlotVec {
             Slot::Ref(val) => val,
             _ => panic!("type mismatch")
         }
+    }
+    pub(crate) fn get_slot(&self, index: usize) -> Slot {
+        self.vars[index].clone()
+    }
+    pub(crate) fn set_slot(&mut self, index: usize, val: Slot){
+        self.vars[index] = val;
     }
 }

@@ -1,7 +1,7 @@
 use bytes::Buf;
 
 use super::{
-    attribute::{read_attributes, AttributeInfo},
+    attribute::{read_attributes, AttributeInfo, code::CodeAttribute},
     class_reader::ClassReader,
     constant::ConstantPool,
 };
@@ -16,11 +16,11 @@ pub(crate) fn read_members(reader: &mut ClassReader, cp: ConstantPool) -> Vec<Me
 }
 
 pub(crate) struct MemberInfo {
-    cp: ConstantPool,
-    access_flags: u16,
-    name_index: u16,
-    descriptor_index: u16,
-    attributes: Vec<AttributeInfo>,
+    pub(crate) cp: ConstantPool,
+    pub(crate) access_flags: u16,
+    pub(crate) name_index: u16,
+    pub(crate) descriptor_index: u16,
+    pub(crate) attributes: Vec<AttributeInfo>,
 }
 
 impl std::fmt::Debug for MemberInfo {
@@ -53,5 +53,14 @@ impl MemberInfo {
     }
     pub fn descriptor(&self) -> &str {
         self.cp.get_utf8(self.descriptor_index)
+    }
+    pub fn code_attribute(&self) -> Option<&CodeAttribute> {
+        for attr in &self.attributes {
+            match attr {
+                AttributeInfo::Code(code_attr) => return Some(code_attr),
+                _ => {}
+            }
+        }
+        None
     }
 }

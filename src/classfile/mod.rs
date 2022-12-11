@@ -22,7 +22,7 @@ pub(crate) struct ClassFile {
     super_class: u16,
     interfaces: Vec<u16>,
     fields: Vec<MemberInfo>,
-    methods: Vec<MemberInfo>,
+    pub(crate) methods: Vec<MemberInfo>,
     attributes: Vec<AttributeInfo>,
 }
 

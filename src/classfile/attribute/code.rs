@@ -6,12 +6,12 @@ use super::{AttributeInfo, read_attributes};
 
 
 pub(crate) struct CodeAttribute {
-    cp: ConstantPool,
-    max_stack: u16,
-    max_locals: u16,
-    code: Bytes,
-    exception_table: Vec<ExceptionTableEntry>,
-    attributes: Vec<AttributeInfo>,
+    pub(crate) cp: ConstantPool,
+    pub(crate) max_stack: u16,
+    pub(crate) max_locals: u16,
+    pub(crate) code: Bytes,
+    pub(crate) exception_table: Vec<ExceptionTableEntry>,
+    pub(crate) attributes: Vec<AttributeInfo>,
 }
 
 impl CodeAttribute {
@@ -41,7 +41,7 @@ impl CodeAttribute {
     }
 }
 
-struct ExceptionTableEntry {
+pub(crate) struct ExceptionTableEntry {
     start_pc: u16,
     end_pc: u16,
     handler_pc: u16,

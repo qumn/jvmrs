@@ -1,5 +1,6 @@
-use super::{slot::SlotVec, object::Object};
+use super::{slot::{SlotVec, Slot}, object::Object};
 
+#[derive(Debug)]
 pub(crate) struct OperandStack {
     size: usize,
     vec: SlotVec,
@@ -56,12 +57,18 @@ impl OperandStack {
         self.size -= 1;
         self.vec.get_ref(self.size)
     }
+    pub(crate) fn pop_slot(&mut self) -> Slot{
+        self.size -= 1;
+        self.vec.get_slot(self.size)
+    }
+    pub(crate) fn push_slot(&mut self, val: Slot) {
+        self.vec.set_slot(self.size, val);
+        self.size += 1;
+    }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::rtda::slot::{self, Slot};
-
     #[test] 
     fn test_operand_stack() {
         use super::*;

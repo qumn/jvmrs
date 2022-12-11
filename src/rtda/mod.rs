@@ -1,5 +1,5 @@
-mod thread;
-mod frame;
+pub mod thread;
+pub mod frame;
 mod slot;
 mod object;
 mod local_vars;
