@@ -60,6 +60,8 @@ use super::{
         istore::{ISTORE, ISTORE_0, ISTORE_1, ISTORE_2, ISTORE_3},
         lstore::{LSTORE, LSTORE_0, LSTORE_1, LSTORE_2, LSTORE_3},
     },
+    invoke::INVOKE_VIRTUAL,
+    return_inst::RETURN_INST,
 };
 
 const nop: NOP = NOP {};
@@ -363,12 +365,12 @@ pub(crate) fn new_instruction(opcode: u8) -> Box<dyn Instruction> {
         //  0xae => Box::new(return),
         //  0xaf => Box::new(return),
         //  0xb0 => Box::new(return),
-        //  0xb1 => Box::new(return),
-        //	 0xb2 => Box::new(return),
+        0xb1 => Box::new(RETURN_INST::default()),
+        0xb2 => Box::new(NOP::default()),
         //  0xb3 => Box::new(return),
         //  0xb4 => Box::new(return),
         //  0xb5 => Box::new(return),
-        //	 0xb6 => Box::new(return),
+        0xb6 => Box::new(INVOKE_VIRTUAL::default()),
         //  0xb7 => Box::new(return),
         //  0xb8 => Box::new(return),
         //  0xb9 => Box::new(return),

@@ -15,11 +15,11 @@ impl Frame {
         Frame {
             local_vars: LocalVars::new(max_locals),
             operand_stack: OperandStack::new(max_stack),
-            thread: thread,
+            thread,
             next_pc: 0,
         }
     }
-    pub(crate) fn PC(&self) -> usize{
+    pub(crate) fn PC(&self) -> usize {
         // thread is the frame parent, so the unwrap is safe here
         self.thread.upgrade().unwrap().pc
     }

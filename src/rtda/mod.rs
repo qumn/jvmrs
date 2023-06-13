@@ -1,6 +1,6 @@
 pub mod thread;
 pub mod frame;
+pub mod heap;
 mod slot;
-mod object;
 mod local_vars;
 mod operand_stack;

@@ -11,6 +11,7 @@ pub(crate) fn interpret(method_info: &MemberInfo) {
     let mut reader = BytecodeReader::new(code_attribute.code.to_vec());
     let mut thread = Thread::new();
     let mut _frame = thread.new_frame(max_locals, max_stack);
+    // refactor thread pc
     loop {
         thread.reset_pc();
         let pc = thread.pc;

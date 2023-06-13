@@ -1,4 +1,4 @@
-use super::object::Object;
+use super::heap::Object;
 
 #[derive(Debug, Clone)]
 pub(crate) enum Slot {

@@ -1,4 +1,4 @@
-use super::{slot::{SlotVec, Slot}, object::Object};
+use super::{slot::{SlotVec, Slot}, heap::Object};
 
 #[derive(Debug)]
 pub(crate) struct OperandStack {
