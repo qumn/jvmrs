@@ -1,8 +1,9 @@
 use bytes::Buf;
 
-use crate::classfile::class_reader::ClassReader;
+use crate::classfile::{self, class_reader::ClassReader};
 
 use super::ConstantInfoRead;
+trait MemberrefInfoTrait {}
 
 #[derive(Debug)]
 pub(crate) struct MemberrefInfo {

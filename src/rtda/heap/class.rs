@@ -1,6 +1,6 @@
-use crate::classfile::ConstantPool;
+use crate::classfile::{self, ConstantPool};
 
-struct Class {
+pub(super) struct Class {
     accessFlags: u16,
     name: String, // thisClassName
     superClassName: String,
@@ -14,4 +14,9 @@ struct Class {
     // instanceSlotCount:     uint,
     // staticSlotCount:       uint,
     // staticVars:            *Slots,
+}
+impl Class {
+    fn new(cf: &classfile::ClassFile) -> Class {
+        todo!()
+    }
 }

@@ -3,7 +3,7 @@ use bytes::Buf;
 pub(crate) use self::{
     attribute::{read_attributes, AttributeInfo},
     class_reader::ClassReader,
-    constant::ConstantPool,
+    constant::*,
     member_info::{read_members, MemberInfo},
 };
 
@@ -14,16 +14,16 @@ mod member_info;
 //pub(crate) use class_reader::*;
 
 pub(crate) struct ClassFile {
-    minor_version: u16,
-    major_version: u16,
-    constant_pool: ConstantPool,
-    access_flags: u16,
-    this_class: u16,
-    super_class: u16,
-    interfaces: Vec<u16>,
-    fields: Vec<MemberInfo>,
+    pub(crate) minor_version: u16,
+    pub(crate) major_version: u16,
+    pub(crate) constant_pool: ConstantPool,
+    pub(crate) access_flags: u16,
+    pub(crate) this_class: u16,
+    pub(crate) super_class: u16,
+    pub(crate) interfaces: Vec<u16>,
+    pub(crate) fields: Vec<MemberInfo>,
     pub(crate) methods: Vec<MemberInfo>,
-    attributes: Vec<AttributeInfo>,
+    pub(crate) attributes: Vec<AttributeInfo>,
 }
 
 impl ClassFile {
@@ -63,7 +63,6 @@ fn read_interfaces(reader: &mut ClassReader) -> Vec<u16> {
     let len = reader.get_u16();
     reader.get_u16s(len as usize)
 }
-
 
 impl std::fmt::Debug for ClassFile {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

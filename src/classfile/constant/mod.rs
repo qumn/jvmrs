@@ -1,10 +1,10 @@
-use std::sync::Arc;
+use std::{path::Iter, sync::Arc};
 
 use bytes::Buf;
 
-use self::{
+pub(crate) use self::{
     class::ClassInfo,
-    member_ref::{FieldrefInfo, InterfaceMethodrefInfo, MethodrefInfo},
+    member_ref::{FieldrefInfo, InterfaceMethodrefInfo, MemberrefInfo, MethodrefInfo},
     name_and_type::NameAndTypeInfo,
     numeric::{DoubleInfo, FloatInfo, IntegerInfo, LongInfo},
     string::{StringInfo, Utf8Info},
@@ -59,6 +59,12 @@ impl ConstantPool {
             _ => panic!("type error: index {} is not a NameAndTypeInfo", index),
         }
     }
+    pub(crate) fn get_class_name(&self, index: u16) -> &str {
+        match self.get_constant(index) {
+            ConstantInfo::ClassInfo(class_info) => self.get_utf8(class_info.name_index),
+            _ => unreachable!(),
+        }
+    }
 
     pub(crate) fn get_utf8(&self, index: u16) -> &str {
         match self.get_constant(index) {
@@ -67,6 +73,14 @@ impl ConstantPool {
                 panic!("type error: index {} is not a Utf8Info", index);
             }
         }
+    }
+
+    pub(crate) fn len(&self) -> usize {
+        self.constants.len()
+    }
+
+    pub(crate) fn iter(&self) -> std::slice::Iter<'_, ConstantInfo> {
+        self.constants.iter()
     }
 }
 
