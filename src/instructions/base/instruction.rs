@@ -37,13 +37,13 @@ impl Index8Instruction {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub(crate) struct Index16Instruction {
-    Index: usize,
+    pub Index: u16,
 }
 
 impl Index16Instruction {
     pub(crate) fn fetch_operands(&mut self, reader: &mut BytecodeReader) {
-        self.Index = reader.read_u16() as usize;
+        self.Index = reader.read_u16();
     }
 }

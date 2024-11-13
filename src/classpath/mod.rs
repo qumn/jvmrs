@@ -1,5 +1,5 @@
 use core::panic;
-use std::{env, path::PathBuf};
+use std::{env, path::PathBuf, rc::Rc};
 
 use anyhow::Result;
 mod composite_entry;
@@ -41,11 +41,12 @@ fn newEntry(path: &str) -> Box<dyn Entry> {
     return Box::new(DirEntry::new(path));
 }
 
-#[derive(Debug)]
+// low-cost cloning by using the `Rc` smart pointer
+#[derive(Debug, Clone)]
 pub(crate) struct ClassPath {
-    bootClassLoader: Box<dyn Entry>,
-    extClassLoader: Box<dyn Entry>,
-    userClassLoader: Box<dyn Entry>,
+    bootClassLoader: Rc<Box<dyn Entry>>,
+    extClassLoader: Rc<Box<dyn Entry>>,
+    userClassLoader: Rc<Box<dyn Entry>>,
 }
 
 impl ClassPath {
@@ -53,9 +54,9 @@ impl ClassPath {
         let (boot_class_loader, ext_class_loader) = Self::parseBootAndExtClassLoader(jre);
         let user_class_loader = Self::parseUserClassLoader(cp);
         Self {
-            bootClassLoader: boot_class_loader,
-            extClassLoader: ext_class_loader,
-            userClassLoader: user_class_loader,
+            bootClassLoader: Rc::new(boot_class_loader),
+            extClassLoader: Rc::new(ext_class_loader),
+            userClassLoader: Rc::new(user_class_loader),
         }
     }
 

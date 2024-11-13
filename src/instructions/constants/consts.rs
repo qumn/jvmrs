@@ -4,7 +4,7 @@ use crate::instructions::base::instruction::Instruction;
 pub(crate) struct ACONST_NULL {}
 impl Instruction for ACONST_NULL {
     fn execute(&mut self, frame: &mut crate::rtda::frame::Frame) {
-        frame.operand_stack.push_ref(std::ptr::null_mut());
+        frame.operand_stack.push_ref(None);
     }
 }
 #[derive(Debug, Default)]

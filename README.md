@@ -27,11 +27,10 @@ java GaussTest.java
 3. 运行项目
 
 ```shell
-cargo run -- -x $JDK_PATH GaussTest
+cargo run -- -x $JAVA_HOME GaussTest
 ```
 
 其中 `-x` 指定 `jre` 的位置, 替换为你的 `jre` 目录
-JDK_PATH 为 jdk 的安装目录
 
 ## Futures
 

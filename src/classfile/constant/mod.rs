@@ -1,10 +1,11 @@
-use std::sync::Arc;
+use core::panic;
+use std::{path::Iter, sync::Arc};
 
 use bytes::Buf;
 
-use self::{
+pub(crate) use self::{
     class::ClassInfo,
-    member_ref::{FieldrefInfo, InterfaceMethodrefInfo, MethodrefInfo},
+    member_ref::{FieldrefInfo, InterfaceMethodrefInfo, MemberrefInfo, MethodrefInfo},
     name_and_type::NameAndTypeInfo,
     numeric::{DoubleInfo, FloatInfo, IntegerInfo, LongInfo},
     string::{StringInfo, Utf8Info},
@@ -19,7 +20,7 @@ mod string;
 mod tag;
 
 // cheap for clone, because it's just contains a Arc pointer
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub(crate) struct ConstantPool {
     constants: Arc<Vec<ConstantInfo>>,
 }
@@ -59,6 +60,14 @@ impl ConstantPool {
             _ => panic!("type error: index {} is not a NameAndTypeInfo", index),
         }
     }
+    pub(crate) fn get_class_name(&self, index: u16) -> &str {
+        match self.get_constant(index) {
+            ConstantInfo::ClassInfo(class_info) => self.get_utf8(class_info.name_index),
+            _ => {
+                panic!("type error: index {} is not ClassInfo", index)
+            }
+        }
+    }
 
     pub(crate) fn get_utf8(&self, index: u16) -> &str {
         match self.get_constant(index) {
@@ -67,6 +76,50 @@ impl ConstantPool {
                 panic!("type error: index {} is not a Utf8Info", index);
             }
         }
+    }
+
+    pub(crate) fn get_int(&self, index: u16) -> i32 {
+        match self.get_constant(index) {
+            ConstantInfo::IntegerInfo(info) => info.val,
+            _ => {
+                panic!("type error: index {} is not a IntegerInfo", index);
+            }
+        }
+    }
+
+    pub(crate) fn get_long(&self, index: u16) -> i64 {
+        match self.get_constant(index) {
+            ConstantInfo::LongInfo(info) => info.val,
+            _ => {
+                panic!("type error: index {} is not a LongInfo", index);
+            }
+        }
+    }
+
+    pub(crate) fn get_float(&self, index: u16) -> f32 {
+        match self.get_constant(index) {
+            ConstantInfo::FloatInfo(info) => info.val,
+            _ => {
+                panic!("type error: index {} is not a FloatInfo", index);
+            }
+        }
+    }
+
+    pub(crate) fn get_double(&self, index: u16) -> f64 {
+        match self.get_constant(index) {
+            ConstantInfo::DoubleInfo(info) => info.val,
+            _ => {
+                panic!("type error: index {} is not a DoubleInfo", index);
+            }
+        }
+    }
+
+    pub(crate) fn len(&self) -> usize {
+        self.constants.len()
+    }
+
+    pub(crate) fn iter(&self) -> std::slice::Iter<'_, ConstantInfo> {
+        self.constants.iter()
     }
 }
 

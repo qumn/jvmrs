@@ -1,7 +1,7 @@
 use bytes::Buf;
 
 use super::{
-    attribute::{read_attributes, AttributeInfo, code::CodeAttribute},
+    attribute::{code::CodeAttribute, constant_value::ConstantValueAttribute, read_attributes, AttributeInfo},
     class_reader::ClassReader,
     constant::ConstantPool,
 };
@@ -58,6 +58,16 @@ impl MemberInfo {
         for attr in &self.attributes {
             match attr {
                 AttributeInfo::Code(code_attr) => return Some(code_attr),
+                _ => {}
+            }
+        }
+        None
+    }
+
+    pub fn constant_value_attribut(&self) -> Option<&ConstantValueAttribute> {
+        for attr in &self.attributes {
+            match attr {
+                AttributeInfo::ConstantValue(const_value) => return Some(const_value),
                 _ => {}
             }
         }

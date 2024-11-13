@@ -1,4 +1,4 @@
-use super::{slot::{SlotVec, Slot}, heap::Object};
+use super::{heap::{Object, SharedObject}, slot::{Slot, SlotVec}};
 
 #[derive(Debug)]
 pub(crate) struct OperandStack {
@@ -49,11 +49,11 @@ impl OperandStack {
         self.size -= 2;
         self.vec.get_double(self.size)
     }
-    pub(crate) fn push_ref(&mut self, val: *mut Object) {
+    pub(crate) fn push_ref(&mut self, val: SharedObject) {
         self.vec.set_ref(self.size, val);
         self.size += 1;
     }
-    pub(crate) fn pop_ref(&mut self) -> *mut Object {
+    pub(crate) fn pop_ref(&mut self) -> SharedObject {
         self.size -= 1;
         self.vec.get_ref(self.size)
     }

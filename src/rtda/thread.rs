@@ -1,6 +1,6 @@
 use std::{collections::VecDeque, rc::Weak};
 
-use super::frame::Frame;
+use super::{frame::Frame, heap::Method};
 
 #[derive(Debug)]
 pub(crate) struct Thread {
@@ -30,8 +30,8 @@ impl Thread {
         self.pc = self.current_frame().next_pc;
     }
 
-    pub(crate) fn new_frame(&mut self, max_locals: usize, max_stack: usize) -> &Frame {
-        let frame = Frame::new(unsafe {Weak::from_raw(self as *const _)}, max_locals, max_stack);
+    pub(crate) fn new_frame(&mut self, method: &Method) -> &Frame {
+        let frame = Frame::new(unsafe {Weak::from_raw(self as *const _)}, method);
         self.push_frame(frame);
         self.current_frame()
     }

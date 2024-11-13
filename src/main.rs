@@ -1,8 +1,9 @@
 #![allow(non_snake_case)]
 #![allow(unused)]
 #![allow(non_upper_case_globals)]
+#![recursion_limit = "512"]
 
-#![recursion_limit = "256"]
+use std::io::stdout;
 
 use anyhow::Ok;
 use clap::Parser;
@@ -10,6 +11,8 @@ use classfile::ClassFile;
 use classfile::MemberInfo;
 use classpath::ClassPath;
 use classpath::Entry;
+use rtda::heap::ClassLoader;
+use tracing::info;
 
 use crate::classfile::ClassReader;
 use crate::cmd::Args;
@@ -25,28 +28,28 @@ mod rtda;
 fn main() {
     tracing_subscriber::fmt::init();
     let args = Args::parse();
+    info!("args: {:?}", args);
     startJvm(args).unwrap();
 }
 
 fn startJvm(args: Args) -> anyhow::Result<()> {
-    let class_loader = ClassPath::new(args.cp.as_deref(), args.Xjre.as_deref());
-    let (data, _entry) = class_loader.read_class(&args.class)?;
+    let class_path = ClassPath::new(args.cp.as_deref(), args.Xjre.as_deref());
+    let class_loader = ClassLoader::new(&class_path);
 
-    let class_reader = ClassReader::new(data);
-    let class_file = ClassFile::new(class_reader);
-    let main = getMainMethod(&class_file).unwrap();
-    interpret(main);
-    println!("{:#?}", class_file);
-    Ok(())
-}
-fn getMainMethod(cf: &ClassFile) -> Option<&MemberInfo> {
-    for m in &cf.methods {
-        println!("{:?}", m);
-        if m.name() == "main" && m.descriptor() == "([Ljava/lang/String;)V" {
-            return Some(m);
+    let class_name = args.class.replace(".", "/");
+    let main_class = class_loader.load_class(&class_name);
+    let main_method = main_class.get_main_method();
+
+    match main_method {
+        Some(method) => {
+            interpret(method);
+        },
+        _ => {
+            println!("main method not found in class {}", args.class);
         }
     }
-    None
+
+    Ok(())
 }
 
 #[cfg(test)]

@@ -11,7 +11,7 @@ impl Instruction for IFNULL {
     fn execute(&mut self, frame: &mut crate::rtda::frame::Frame) {
         let stack = &mut frame.operand_stack;
         let ref_ = stack.pop_ref();
-        if ref_.is_null() {
+        if ref_.is_none() {
             self.branch.jump(frame);
         }
     }
@@ -28,7 +28,7 @@ impl Instruction for IFNONNULL {
     fn execute(&mut self, frame: &mut crate::rtda::frame::Frame) {
         let stack = &mut frame.operand_stack;
         let ref_ = stack.pop_ref();
-        if !ref_.is_null() {
+        if !ref_.is_none() {
             self.branch.jump(frame);
         }
     }

@@ -1,9 +1,12 @@
+use std::rc::Weak;
+
 use bytes::Buf;
+use tracing::debug;
 
 pub(crate) use self::{
     attribute::{read_attributes, AttributeInfo},
     class_reader::ClassReader,
-    constant::ConstantPool,
+    constant::*,
     member_info::{read_members, MemberInfo},
 };
 
@@ -14,16 +17,16 @@ mod member_info;
 //pub(crate) use class_reader::*;
 
 pub(crate) struct ClassFile {
-    minor_version: u16,
-    major_version: u16,
-    constant_pool: ConstantPool,
-    access_flags: u16,
-    this_class: u16,
-    super_class: u16,
-    interfaces: Vec<u16>,
-    fields: Vec<MemberInfo>,
+    pub(crate) minor_version: u16,
+    pub(crate) major_version: u16,
+    pub(crate) constant_pool: ConstantPool,
+    pub(crate) access_flags: u16,
+    pub(crate) this_class: u16,
+    pub(crate) super_class: u16,
+    pub(crate) interfaces: Vec<u16>,
+    pub(crate) fields: Vec<MemberInfo>,
     pub(crate) methods: Vec<MemberInfo>,
-    attributes: Vec<AttributeInfo>,
+    pub(crate) attributes: Vec<AttributeInfo>,
 }
 
 impl ClassFile {
@@ -35,7 +38,7 @@ impl ClassFile {
         }
         let minor_version = reader.get_u16();
         let major_version = reader.get_u16();
-        println!("minor: {}\t major: {}", minor_version, major_version);
+        debug!("minor: {}\t major: {}", minor_version, major_version);
         let constant_pool = ConstantPool::new(&mut reader);
         let access_flags = reader.get_u16();
         let this_class = reader.get_u16();
@@ -57,13 +60,30 @@ impl ClassFile {
             attributes,
         }
     }
+
+    pub(crate) fn class_name(&self) -> &str {
+        self.constant_pool.get_class_name(self.this_class)
+    }
+
+    pub(crate) fn super_class_name(&self) -> &str {
+        if self.super_class > 0 {
+            return self.constant_pool.get_class_name(self.super_class);
+        }
+        ""
+    }
+
+    pub(crate) fn interface_names(&self) -> Vec<String> {
+        self.interfaces
+            .iter()
+            .map(|&cpIdx| self.constant_pool.get_class_name(cpIdx).to_string())
+            .collect()
+    }
 }
 
 fn read_interfaces(reader: &mut ClassReader) -> Vec<u16> {
     let len = reader.get_u16();
     reader.get_u16s(len as usize)
 }
-
 
 impl std::fmt::Debug for ClassFile {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
