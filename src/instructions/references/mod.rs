@@ -6,3 +6,5 @@ pub mod get_field;
 pub mod constants;
 pub mod invoke_special;
 pub mod invocke_virtual;
+pub mod instance_of;
+pub mod check_cast;

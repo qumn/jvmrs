@@ -20,6 +20,10 @@ impl Object {
             fields: SlotVec::new(instanceSlot),
         })))
     }
+
+    pub fn is_instance_of(&self, class: SharedClass) -> bool {
+       class.is_assignable_from(&self.class)
+    }
 }
 
 impl PartialEq for Object {

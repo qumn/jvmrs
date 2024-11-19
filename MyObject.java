@@ -9,6 +9,10 @@ public class MyObject {
         x = MyObject.staticVar; // getstatic
         myObj.instanceVar = x; // putfield
         x = myObj.instanceVar; // getfield
-        System.out.println(myObj.instanceVar);
+        Object obj = myObj;
+        if (obj instanceof MyObject) {
+            myObj = (MyObject) obj;
+            System.out.println(myObj.instanceVar);
+        }
     }
 }

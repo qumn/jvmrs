@@ -49,7 +49,7 @@ use super::{
         xor::{IXOR, LXOR},
     },
     references::{
-        constants::{LDC, LDC2_W, LDC_W}, get_field::GET_FEILD, get_static::GET_STATIC, invocke_virtual::INVOKE_VIRTUAL, invoke_special:: INVOKE_SPECIAL, new::NEW, put_field::PUT_FIELD, put_static::PUT_STATIC
+        check_cast::CHECK_CAST, constants::{LDC, LDC2_W, LDC_W}, get_field::GET_FEILD, get_static::GET_STATIC, instance_of::INSTANCE_OF, invocke_virtual::INVOKE_VIRTUAL, invoke_special:: INVOKE_SPECIAL, new::NEW, put_field::PUT_FIELD, put_static::PUT_STATIC
     },
     return_inst::RETURN_INST,
     stack::{
@@ -382,8 +382,8 @@ pub(crate) fn new_instruction(opcode: u8) -> Box<dyn Instruction> {
         //  0xbd => Box::new(return),
         //  0xbe => Box::new(return),
         //  0xbf => Box::new(return),
-        //  0xc0 => Box::new(return),
-        //  0xc1 => Box::new(return),
+         0xc0 => Box::new(CHECK_CAST::default()),
+         0xc1 => Box::new(INSTANCE_OF::default()),
         //  0xc2 => Box::new(return),
         //  0xc3 => Box::new(return),
         0xc4 => Box::new(WIDE::default()),

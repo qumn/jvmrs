@@ -12,7 +12,10 @@ use tracing_subscriber::field::debug;
 
 use crate::{
     classfile::{self},
-    rtda::{heap::SharedConstantPool, slot::{Slot, SlotVec}},
+    rtda::{
+        heap::SharedConstantPool,
+        slot::{Slot, SlotVec},
+    },
 };
 
 use super::{
@@ -126,6 +129,51 @@ impl Class {
             return true;
         }
         self.get_package_name() == other.get_package_name()
+    }
+
+    pub fn is_assignable_from(&self, other: &Class) -> bool {
+        if self.name == other.name {
+            return true;
+        }
+
+        if self.is_interface() {
+            return other.is_implements(self);
+        } else {
+            return other.is_subclass_of(self);
+        }
+    }
+
+    pub fn is_implements(&self, other: &Class) -> bool {
+        let mut temp = Some(self);
+        while let Some(c) = temp {
+            for i in &c.interfaces {
+                if i.name == other.name || i.is_subinstance_of(other) {
+                    return true;
+                }
+            }
+            temp = c.superClass.as_deref();
+        }
+        false
+    }
+
+    fn is_subinstance_of(&self, other: &Class) -> bool {
+        for i in &self.interfaces {
+            if i.name == other.name || i.is_subinstance_of(other) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    pub fn is_subclass_of(&self, other: &Class) -> bool {
+        let mut temp = &self.superClass;
+        while let Some(c) = temp.as_ref() {
+            if c.name == other.name {
+                return true;
+            }
+            temp = &c.superClass;
+        }
+        false
     }
 
     pub fn get_package_name(&self) -> &str {
