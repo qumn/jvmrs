@@ -47,3 +47,4 @@ cargo run -- -x $JAVA_HOME GaussTest
 ## 资料
 1. 《自己动手写Java虚拟机》-- 张秀宏
 2. [jvmgo-book](https://github.com/zxh0/jvmgo-book)
+3. 《深入理解Java虚拟机》 -- 周志明
